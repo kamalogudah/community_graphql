@@ -4,8 +4,12 @@ defmodule CommunityGraphqlWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
   end
-
-  scope "/api", CommunityGraphqlWeb do
+  
+  scope "/" do
     pipe_through :api
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: CommunityGraphqlWeb.Schema,
+      interface: :simple,
+      context: %{pubsub: CommunityGraphqlWeb.Endpoint }
   end
 end
